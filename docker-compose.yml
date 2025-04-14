@@ -1,0 +1,78 @@
+services:
+
+  healthchecker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - app-network
+
+  http-server-1:
+    image: nginx:alpine
+    ports:
+      - "8081:80"
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:80"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  http-server-2:
+    image: nginx:alpine
+    ports:
+      - "8082:80"
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:80"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  http-server-3:
+    image: nginx:alpine
+    ports:
+      - "8083:80"
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:80"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  http-server-4:
+    image: nginx:alpine
+    ports:
+      - "8084:80"
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:81"] # Intentionally wrong port
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  http-server-5:
+    image: nginx:alpine
+    ports:
+      - "8085:80"
+    networks:
+      - app-network
+    command: ["nginx", "-c", "/nonexistent/nginx.conf"] # Invalid config path to make it fail
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:80"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+
+networks:
+  app-network:
+    driver: bridge
