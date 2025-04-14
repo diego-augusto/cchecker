@@ -52,8 +52,8 @@ This project aims to:
 
 1. Clone this repository:
    ```bash
-   git clone https://github.com/yourusername/healthchecker.git
-   cd healthchecker
+   git clone git@github.com:diego-augusto/cchecker.git
+   cd cchecker
    ```
 
 2. Build and run the containers:
